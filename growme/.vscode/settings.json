@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.base": "makefile",
+    "*.ts.tpl": "typescript",
+    "*.tpl": "php",
+    "*.phtml": "php",
+    "wifi.h": "c",
+    "wifista.h": "c"
+  }
+}
