@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "A4988_STEPPER_MOTOR_DRIVER_CARRIER_BLACK")(type "Legacy")(uri "${KIPRJMOD}/lib/A4988_STEPPER_MOTOR_DRIVER_CARRIER_BLACK.lib")(options "")(descr ""))
+  (lib (name "ESP32-DEVKITC")(type "Legacy")(uri "${KIPRJMOD}/lib/ESP32-DEVKITC.lib")(options "")(descr ""))
+)
