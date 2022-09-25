@@ -5,6 +5,7 @@
     "*.tpl": "php",
     "*.phtml": "php",
     "wifi.h": "c",
-    "wifista.h": "c"
+    "wifista.h": "c",
+    "*.ipp": "cpp"
   }
 }
