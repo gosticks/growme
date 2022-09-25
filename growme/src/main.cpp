@@ -7,16 +7,17 @@
 #include "sdkconfig.h"
 #include "A4988.h"
 
-#define UP_BTN_PIN 2
-#define DOWN_BTN_PIN 15
+#define UP_BTN_PIN 27
+#define DOWN_BTN_PIN 13
 
 // using a 200-step motor (most common)
 #define MOTOR_STEPS 200
-// configure the pins connected
-#define DIR 17
-#define STEP 16
 
-A4988 stepper(MOTOR_STEPS, DIR, STEP);
+// configure the pins connected
+#define M1_STEP 23
+#define M1_DIR 22
+
+A4988 stepper(MOTOR_STEPS, M1_DIR, M1_STEP);
 
 // TODO: for now use simple arduino based
 // task structure adjust as needed afterwards
