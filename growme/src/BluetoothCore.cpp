@@ -22,8 +22,8 @@
 #include "pb_encode.h"
 
 #define BT_CORE_TAG "BT_CORE"
-#define SPP_SERVER_NAME "MAUS_SPP_SERVER"
-#define EXAMPLE_DEVICE_NAME "MAUS_BT_SERIAL"
+#define SPP_SERVER_NAME "grow-me-beta"
+#define DEVICE_NAME "GrowMe-beta"
 
 using namespace BluetoothCore;
 
@@ -103,7 +103,7 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param) {
 						 param->start.handle,
 						 param->start.sec_id,
 						 param->start.scn);
-				esp_bt_dev_set_device_name(EXAMPLE_DEVICE_NAME);
+				esp_bt_dev_set_device_name(DEVICE_NAME);
 				esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
 
 				// store handle for later use
@@ -260,9 +260,6 @@ bool bluetoothEspSetup() {
 	esp_bt_pin_code_t pin_code;
 	esp_bt_gap_set_pin(pin_type, 0, pin_code);
 
-	// ESP_LOGI(BT_CORE_TAG, "Own address:[%s]", btAddrToStr((uint8_t *)esp_bt_dev_get_address(),
-	// bda_str, sizeof(bda_str)));
-
 	return true;
 }
 
@@ -317,6 +314,7 @@ bool BluetoothCore::setup() {
 	if (!bluetoothEspSetup()) {
 		return false;
 	}
+
 
 	setupCompleted = true;
 	return true;

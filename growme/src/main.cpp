@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "A4988.h"
+#include "BluetoothCore.hpp"
 #include "sdkconfig.h"
 
 #define UP_BTN_PIN 27
@@ -104,16 +105,19 @@ void controlTask(void *pvParameter) {
 }
 
 extern "C" void app_main() {
+	// bootstrap bluetooth controller
+	if (!BluetoothCore::setup()) {
+		ESP_LOGI("MAIN", "BT setup failed");
+	}
+
 	// initialize arduino library before we start the tasks
 	initArduino();
 
 	// setup serial COMs
-	Serial.begin(115200);
-	// bootstrap bluetooth controller
-	Bluetooth
+	// Serial.begin(115200);
 
-		// setup event group
-		xMotorEventGroup = xEventGroupCreate();
+	// setup event group
+	xMotorEventGroup = xEventGroupCreate();
 
 	// xTaskCreate(&arduinoTask, "arduino_task", 8192, NULL, 5, NULL);
 	xTaskCreate(&controlTask, "control_task", 8192, NULL, 3, NULL);
