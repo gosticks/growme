@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "./proto";
+
+message MsgSetProgress {
+	float progress = 1;
+}
+
+message Command {
+	oneof msg {
+		MsgSetProgress progress = 1;
+	}
+}
