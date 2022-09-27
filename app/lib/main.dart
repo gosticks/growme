@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:health/health.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 void main() {
   runApp(const GrowMeApp());
@@ -391,8 +392,40 @@ class _MyHomePageState extends State<GrowMeHomePage> {
           automaticallyImplyLeading: true,
           elevation: 0,
         ),
-        body: Center(
-          child: _content(),
+        body: CarouselSlider(
+          options: CarouselOptions(
+              height: MediaQuery.of(context).size.height * 0.7,
+              initialPage: 1,
+              autoPlay: false,
+              enlargeCenterPage: true,
+              enableInfiniteScroll: false),
+          items: [1, 2, 3, 4, 5].map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Card(
+                        elevation: 1,
+                        margin: EdgeInsets.all(5),
+                        child: Padding(
+                            padding: EdgeInsets.all(25),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 15),
+                                CircleAvatar(
+                                  backgroundColor: Colors.lightGreen,
+                                  backgroundImage:
+                                      AssetImage('assets/prototype-render.png'),
+                                  radius: 150.0,
+                                ),
+                                SizedBox(height: 25),
+                                _content(),
+                              ],
+                            ))));
+              },
+            );
+          }).toList(),
         ),
         floatingActionButton:
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
