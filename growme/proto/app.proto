@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message KnownDevicesState {
+    repeated KnownDevice devices = 1;
+}
+
+message KnownDevice {
+    string name = 1;
+    string remoteId = 2;
+    string remoteName = 3;
+}

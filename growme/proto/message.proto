@@ -2,12 +2,27 @@ syntax = "proto3";
 
 option go_package = "./proto";
 
-message MsgSetProgress {
+message Command {
+	oneof msg {
+		ProgressCommand progress = 1;
+		MoveMotorCommand move = 2;
+		ResetMotorPositionCommand reset = 3;
+
+	}
+}
+
+message ProgressCommand {
 	float progress = 1;
 }
 
-message Command {
-	oneof msg {
-		MsgSetProgress progress = 1;
-	}
+message MoveMotorCommand {
+	int32 target = 1;
+}
+
+message ResetMotorPositionCommand {
+	int32 motorIndex = 1;
+}
+
+message MotorStatus {
+	int32 totalSteps = 1;
 }

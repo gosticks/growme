@@ -6,10 +6,19 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
-PB_BIND(MsgSetProgress, MsgSetProgress, AUTO)
-
-
 PB_BIND(Command, Command, AUTO)
+
+
+PB_BIND(ProgressCommand, ProgressCommand, AUTO)
+
+
+PB_BIND(MoveMotorCommand, MoveMotorCommand, AUTO)
+
+
+PB_BIND(ResetMotorPositionCommand, ResetMotorPositionCommand, AUTO)
+
+
+PB_BIND(MotorStatus, MotorStatus, AUTO)
 
 
 
