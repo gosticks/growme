@@ -46,13 +46,14 @@ class EditDeviceViewState extends State<EditDeviceView> {
                   controller: _deviceNameController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Enter a search term',
+                    hintText: 'Give your plant a name',
                   ),
                 ),
                 const SizedBox(height: 25),
                 const CircleAvatar(
                   backgroundColor: Colors.lightGreen,
-                  backgroundImage: AssetImage('assets/prototype-render.png'),
+                  backgroundImage:
+                      AssetImage('assets/images/prototype-render.png'),
                   radius: 150.0,
                 ),
                 const SizedBox(height: 50),

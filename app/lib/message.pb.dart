@@ -248,3 +248,44 @@ class ResetMotorPositionCommand extends $pb.GeneratedMessage {
   void clearMotorIndex() => clearField(1);
 }
 
+class MotorStatus extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MotorStatus', createEmptyInstance: create)
+    ..p<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.K3)
+    ..hasRequiredFields = false
+  ;
+
+  MotorStatus._() : super();
+  factory MotorStatus({
+    $core.Iterable<$core.int>? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status.addAll(status);
+    }
+    return _result;
+  }
+  factory MotorStatus.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MotorStatus.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MotorStatus clone() => MotorStatus()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MotorStatus copyWith(void Function(MotorStatus) updates) => super.copyWith((message) => updates(message as MotorStatus)) as MotorStatus; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MotorStatus create() => MotorStatus._();
+  MotorStatus createEmptyInstance() => create();
+  static $pb.PbList<MotorStatus> createRepeated() => $pb.PbList<MotorStatus>();
+  @$core.pragma('dart2js:noInline')
+  static MotorStatus getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MotorStatus>(create);
+  static MotorStatus? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get status => $_getList(0);
+}
+

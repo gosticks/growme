@@ -2,6 +2,7 @@
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
+#include <EEPROM.h>
 #include <WiFi.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -50,14 +51,7 @@ char *motorControlCharacteristicUUIDs[] = {
 };
 
 // BLE characteristic IDs for each motor
-char *motorInfoCharacteristicUUIDs[] = {
-	"9c05490f-cc74-4fd2-8d16-fb228e3f2270",
-	"6b342a89-086b-4e6c-8c26-c46352e99709",
-	"6729beea-61c3-4376-a8fb-9f0aab020ed0",
-	"faf8581b-1085-4b45-980f-5039db39cfbe",
-	"69999658-9997-4e57-8e07-e14e0faf9b32",
-	"d02d9c65-df4d-42d5-abef-24f71b612aad",
-};
+char *motorInfoCharacteristicUUID = "9c05490f-cc74-4fd2-8d16-fb228e3f2270";
 
 // motor movement direction
 // -1 = counter clockwise
@@ -135,8 +129,7 @@ void motorTask(void *pvParameter) {
 					vTaskDelay(20);
 				}
 			}
-
-			m->currentPosition = ongoingStepTarget;
+			m->updateCurrentPosition(ongoingStepTarget);
 		}
 
 		vTaskDelay(noActionIdleTime);
@@ -203,13 +196,15 @@ extern "C" void app_main() {
 		BLECharacteristic *ctrl = pService->createCharacteristic(
 			motorControlCharacteristicUUIDs[i],
 			BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
-		BLECharacteristic *info = pService->createCharacteristic(motorInfoCharacteristicUUIDs[i],
-																 BLECharacteristic::PROPERTY_READ);
 
 		// register characteristic and callback methods
 		m->addControlCharacteristic(ctrl);
-		m->addInfoCharacteristic(info);
 	}
+
+	// create single state characteristic
+	BLECharacteristic *info = pService->createCharacteristic(motorInfoCharacteristicUUID,
+															 BLECharacteristic::PROPERTY_READ);
+	info->setCallbacks(new CustomBLEMotorInfoCallback(motors));
 
 	pService->start();
 	BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -221,16 +216,17 @@ extern "C" void app_main() {
 
 	pServer->setCallbacks(new CustomBLEServerCallback());
 
-	// setup serial COMs
-	// Serial.begin(115200);
+	// Setup on device memory
+	// one long 64bit state per motor
+	EEPROM.begin(8 * 6);
 
 	// xTaskCreate(&arduinoTask, "arduino_task", 8192, NULL, 5, NULL);
 	xTaskCreate(&controlTask, "control_task", 4096, NULL, 3, NULL);
 
 	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[0], 2, NULL);
-	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[1], 2, NULL);
-	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[2], 2, NULL);
-	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[3], 2, NULL);
-	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[4], 2, NULL);
-	xTaskCreate(&motorTask, "motor_1_task", 4096, (void *)motors[5], 2, NULL);
+	xTaskCreate(&motorTask, "motor_2_task", 4096, (void *)motors[1], 2, NULL);
+	xTaskCreate(&motorTask, "motor_3_task", 4096, (void *)motors[2], 2, NULL);
+	xTaskCreate(&motorTask, "motor_4_task", 4096, (void *)motors[3], 2, NULL);
+	xTaskCreate(&motorTask, "motor_5_task", 4096, (void *)motors[4], 2, NULL);
+	xTaskCreate(&motorTask, "motor_6_task", 4096, (void *)motors[5], 2, NULL);
 }

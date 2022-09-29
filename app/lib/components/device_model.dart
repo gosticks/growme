@@ -7,14 +7,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:grow_me_app/app.pb.dart';
 import 'package:grow_me_app/components/connection_sheet.dart';
+import 'package:grow_me_app/message.pbserver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
 
 const storageKey = "known-devices";
 
+const Map<String, String> deviceCharacteristics = {
+  "M1": "68023a4e-e253-46e4-a439-f716b3702ae1",
+  "M2": "a9102165-7b40-4cce-9008-f4af28b5ac5e",
+  "M3": "4e9cad83-71d8-40c1-8876-53c1cd5fe27e",
+  "M4": "e0b49f4b-d7b0-4336-8562-41a16e16e8e6",
+  "M5": "5f01e609-182f-45fe-aa23-45c12b82e2df",
+  "M6": "09da8768-b6ba-4b4e-b91f-65d624581d48",
+  "info": "9c05490f-cc74-4fd2-8d16-fb228e3f2270"
+};
+
 class LinkedDevice {
   BluetoothDevice? _device;
+  MotorStatus? _motorStatus;
   KnownDevice description;
   BluetoothDeviceState _status = BluetoothDeviceState.disconnected;
+
+  MotorStatus? get motorStatus {
+    return _motorStatus;
+  }
 
   BluetoothDeviceState get status {
     return _status;
@@ -43,11 +60,80 @@ class LinkedDevice {
   LinkedDevice(this.description, BluetoothDevice? device) {
     this.device = device;
   }
+
+  Future<BluetoothCharacteristic?> _getCharacteristic(String uuid) async {
+    if (_device == null) {
+      return null;
+    }
+
+    try {
+      var services = await _device!.discoverServices();
+
+      BluetoothService service = services.firstWhere(
+          (element) => element.uuid.toString() == bleServiceName.toLowerCase());
+      if (service == null) {
+        log("device does not offer motor control service",
+            name: "device.debug");
+      }
+
+      // find selected characteristic
+      return service.characteristics
+          .firstWhereOrNull((ch) => ch.uuid.toString() == uuid.toLowerCase());
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> fetchStatusUpdate() async {
+    var ch = await _getCharacteristic(deviceCharacteristics["info"]!);
+    if (ch == null) {
+      return false;
+    }
+
+    var resp = await ch.read();
+    try {
+      var status = MotorStatus.fromBuffer(resp);
+      _motorStatus = status;
+      return true;
+    } catch (e) {
+      log("failed to fetch new machine status $e");
+      return false;
+    }
+  }
+
+  Future<bool> moveMotor(int motorIndex, int offset) async {
+    var ch =
+        await _getCharacteristic(deviceCharacteristics["M${motorIndex + 1}"]!);
+    if (ch == null) {
+      return false;
+    }
+
+    var cmd = Command(move: MoveMotorCommand(target: offset));
+
+    await ch.write(cmd.writeToBuffer(), withoutResponse: false);
+    await ch.setNotifyValue(true);
+
+    return true;
+  }
+
+  Future<bool> resetMotorPosition(int motorIndex) async {
+    var ch =
+        await _getCharacteristic(deviceCharacteristics["M${motorIndex + 1}"]!);
+    if (ch == null) {
+      return false;
+    }
+
+    var cmd = Command(reset: ResetMotorPositionCommand());
+
+    await ch.write(cmd.writeToBuffer(), withoutResponse: false);
+    await ch.setNotifyValue(true);
+
+    return true;
+  }
 }
 
 class DeviceModel extends ChangeNotifier {
   List<LinkedDevice> _devices = [];
-  Stream<List<ScanResult>>? _scanStream = null;
 
   UnmodifiableListView<LinkedDevice> get devices =>
       UnmodifiableListView(_devices);

@@ -53,3 +53,13 @@ const ResetMotorPositionCommand$json = const {
 
 /// Descriptor for `ResetMotorPositionCommand`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List resetMotorPositionCommandDescriptor = $convert.base64Decode('ChlSZXNldE1vdG9yUG9zaXRpb25Db21tYW5kEh4KCm1vdG9ySW5kZXgYASABKAVSCm1vdG9ySW5kZXg=');
+@$core.Deprecated('Use motorStatusDescriptor instead')
+const MotorStatus$json = const {
+  '1': 'MotorStatus',
+  '2': const [
+    const {'1': 'status', '3': 1, '4': 3, '5': 5, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `MotorStatus`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List motorStatusDescriptor = $convert.base64Decode('CgtNb3RvclN0YXR1cxIWCgZzdGF0dXMYASADKAVSBnN0YXR1cw==');

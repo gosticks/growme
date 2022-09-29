@@ -16,7 +16,7 @@ void main() {
       create: (context) => DeviceModel(), child: const GrowMeApp()));
 }
 
-const primarySwatch = MaterialColor(0xFFE5DBCF, {
+const primarySwatch = MaterialColor(0xFF273825, {
   50: Color(0xFFE5E7E5),
   100: Color(0xFFBEC3BE),
   200: Color(0xFF939C92),
@@ -28,6 +28,9 @@ const primarySwatch = MaterialColor(0xFFE5DBCF, {
   800: Color(0xFF172416),
   900: Color(0xFF0E170D),
 });
+
+const lightBackgroundColor = Color(0xFFE5DBCF);
+
 const PrimaryAssentColor = Color(0x00263825);
 const PrimaryDarkColor = Color(0xFF808080);
 const ErroColor = Color(0xFF808080);
@@ -121,15 +124,17 @@ class _MyHomePageState extends State<GrowMeHomePage> {
       appBar: AppBar(
         // Here we take the value from the GrowMeHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Image(
+            height: 50, image: AssetImage("assets/images/logo.png")),
         leadingWidth: 100,
-        actions: [const Icon(Icons.settings)].toList(),
+        // actions: [const Icon(Icons.settings)].toList(),
         automaticallyImplyLeading: true,
         elevation: 0,
       ),
+      backgroundColor: primarySwatch,
       body: Column(
           children: [
-        const Spacer(),
+        const SizedBox(height: 50),
         DeviceCarousel(leadingCarouselItems: [_connectionCard()]),
         const Spacer(),
       ].toList()),

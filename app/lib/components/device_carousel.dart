@@ -35,19 +35,19 @@ class DeviceCarouselState extends State<DeviceCarousel> {
                             backgroundColor: device.isConnected
                                 ? Colors.lightGreen
                                 : Colors.grey[400],
-                            backgroundImage:
-                                AssetImage('assets/prototype-render.png'),
+                            backgroundImage: const AssetImage(
+                                'assets/images/prototype-render.png'),
                             radius: 150.0,
                           ),
                           ...(!device.isConnected
                               ? [
                                   const SizedBox(height: 25),
-                                  Text("Lost connection..."),
+                                  const Text("Lost connection..."),
                                 ]
                               : [
                                   const SizedBox(height: 25),
                                 ]),
-                          Spacer(),
+                          const Spacer(),
                           DeviceActionSheet(device: device, model: model)
                         ].toList(),
                       ))));

@@ -19,12 +19,12 @@ struct MotorControl {
 	long stepTarget = 0;
 	long currentPosition = 0;
 	BLECharacteristic *bleCharacteristic = NULL;
-	BLECharacteristic *bleInfoCharacteristic = NULL;
 
 	MotorControl(uint8_t index, short dir, short step);
 
 	void addControlCharacteristic(BLECharacteristic *bleCharac);
-	void addInfoCharacteristic(BLECharacteristic *bleCharac);
+
+	void updateCurrentPosition(long newPosition);
 };
 
 class CustomBLEMotorCallback : public BLECharacteristicCallbacks {
@@ -44,8 +44,8 @@ class CustomBLEMotorCallback : public BLECharacteristicCallbacks {
 };
 
 class CustomBLEMotorInfoCallback : public BLECharacteristicCallbacks {
-	int motorIndex;
-	MotorControl *controller;
+	MotorControl **motors;
+	size_t numMotors;
 	MotorStatus msg;
 
 	// set internal position value
@@ -54,8 +54,9 @@ class CustomBLEMotorInfoCallback : public BLECharacteristicCallbacks {
 	void onRead(BLECharacteristic *ch);
 
    public:
-	CustomBLEMotorInfoCallback(uint8_t motorIndex, MotorControl *controller) {
-		this->motorIndex = motorIndex;
-		this->controller = controller;
+	CustomBLEMotorInfoCallback(MotorControl *motors[]) {
+		this->motors = motors;
+		// TODO: compute dynamically
+		numMotors = 6;
 	};
 };

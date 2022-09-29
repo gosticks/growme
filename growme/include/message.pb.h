@@ -11,7 +11,7 @@
 
 /* Struct definitions */
 typedef struct _MotorStatus { 
-    int32_t totalSteps;
+    pb_callback_t status;
 } MotorStatus;
 
 typedef struct _MoveMotorCommand { 
@@ -45,15 +45,15 @@ extern "C" {
 #define ProgressCommand_init_default             {0}
 #define MoveMotorCommand_init_default            {0}
 #define ResetMotorPositionCommand_init_default   {0}
-#define MotorStatus_init_default                 {0}
+#define MotorStatus_init_default                 {{{NULL}, NULL}}
 #define Command_init_zero                        {0, {ProgressCommand_init_zero}}
 #define ProgressCommand_init_zero                {0}
 #define MoveMotorCommand_init_zero               {0}
 #define ResetMotorPositionCommand_init_zero      {0}
-#define MotorStatus_init_zero                    {0}
+#define MotorStatus_init_zero                    {{{NULL}, NULL}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define MotorStatus_totalSteps_tag               1
+#define MotorStatus_status_tag                   1
 #define MoveMotorCommand_target_tag              1
 #define ProgressCommand_progress_tag             1
 #define ResetMotorPositionCommand_motorIndex_tag 1
@@ -88,8 +88,8 @@ X(a, STATIC,   SINGULAR, INT32,    motorIndex,        1)
 #define ResetMotorPositionCommand_DEFAULT NULL
 
 #define MotorStatus_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, INT32,    totalSteps,        1)
-#define MotorStatus_CALLBACK NULL
+X(a, CALLBACK, REPEATED, INT32,    status,            1)
+#define MotorStatus_CALLBACK pb_default_field_callback
 #define MotorStatus_DEFAULT NULL
 
 extern const pb_msgdesc_t Command_msg;
@@ -106,8 +106,8 @@ extern const pb_msgdesc_t MotorStatus_msg;
 #define MotorStatus_fields &MotorStatus_msg
 
 /* Maximum encoded size of messages (where known) */
+/* MotorStatus_size depends on runtime parameters */
 #define Command_size                             13
-#define MotorStatus_size                         11
 #define MoveMotorCommand_size                    11
 #define ProgressCommand_size                     5
 #define ResetMotorPositionCommand_size           11

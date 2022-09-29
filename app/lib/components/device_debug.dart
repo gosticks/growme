@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:grow_me_app/components/bottom_sheet.dart';
+import 'package:grow_me_app/components/button.dart';
 import 'package:grow_me_app/components/connection_sheet.dart';
 import 'package:grow_me_app/components/device_model.dart';
 import 'package:grow_me_app/message.pb.dart';
@@ -9,7 +10,6 @@ import 'dart:developer' as developer;
 
 class DeviceDebugView extends StatefulWidget {
   const DeviceDebugView({super.key, required this.device});
-
   final LinkedDevice device;
 
   @override
@@ -18,52 +18,6 @@ class DeviceDebugView extends StatefulWidget {
 
 class DeviceDebugViewState extends State<DeviceDebugView> {
   final List<double> _motorStepValues = [20, 20, 40, 50, 60, 20];
-
-  Future<BluetoothCharacteristic?> _getCharacteristic() async {
-    var device = widget.device.device;
-    try {
-      var services = await device!.discoverServices();
-
-      BluetoothService service = services.firstWhere(
-          (element) => element.uuid.toString() == bleServiceName.toLowerCase());
-      if (service == null) {
-        developer.log("device does not offer motor control service",
-            name: "device.debug");
-      }
-      return service.characteristics.first;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  void _resetMotorPosition(int index) async {
-    var ch = await _getCharacteristic();
-    if (ch == null) {
-      return;
-    }
-
-    var cmd = Command(reset: ResetMotorPositionCommand());
-
-    await ch.write(cmd.writeToBuffer(), withoutResponse: false);
-    await ch.setNotifyValue(true);
-  }
-
-  void _sendMotorControl(int index, bool isDecriment) async {
-    var ch = await _getCharacteristic();
-    if (ch == null) {
-      return;
-    }
-
-    // find motor control service
-    int factor = isDecriment ? -1 : 1;
-
-    var cmd = Command(
-        move:
-            MoveMotorCommand(target: factor * _motorStepValues[index].toInt()));
-
-    await ch.write(cmd.writeToBuffer(), withoutResponse: false);
-    await ch.setNotifyValue(true);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +28,20 @@ class DeviceDebugViewState extends State<DeviceDebugView> {
             Text("Motor ${entry.key + 1}"),
             Row(
               children: [
+                (widget.device.motorStatus == null
+                    ? Container()
+                    : Row(
+                        children: widget.device.motorStatus!.status
+                            .asMap()
+                            .entries
+                            .map((e) => Column(
+                                  children: [Text("M${e.key} pos: ${e.value}")],
+                                ))
+                            .toList(),
+                      )),
                 IconButton(
                     onPressed: () {
-                      _resetMotorPosition(entry.key);
+                      widget.device.resetMotorPosition(entry.key);
                     },
                     icon: const Icon(Icons.replay_outlined)),
                 const Spacer(),
@@ -94,17 +59,24 @@ class DeviceDebugViewState extends State<DeviceDebugView> {
                 const Spacer(),
                 IconButton(
                     onPressed: () {
-                      _sendMotorControl(entry.key, true);
+                      widget.device.moveMotor(
+                          entry.key, -1 * _motorStepValues[entry.key].toInt());
                     },
                     icon: const Icon(Icons.remove_circle)),
                 IconButton(
                     onPressed: () {
-                      _sendMotorControl(entry.key, false);
+                      widget.device.moveMotor(
+                          entry.key, _motorStepValues[entry.key].toInt());
                     },
                     icon: const Icon(Icons.add_circle))
               ],
             )
           ])),
+      Button("Reload state", (() {
+        widget.device.fetchStatusUpdate().then((value) {
+          setState(() {});
+        });
+      }))
     ]);
   }
 }
