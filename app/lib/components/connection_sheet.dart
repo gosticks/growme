@@ -34,8 +34,6 @@ class ConnectionSheetState extends State<ConnectionSheet> {
     FlutterBlue flutterBlue = FlutterBlue.instance;
 
     // Start scanning
-    var resp = flutterBlue.startScan(timeout: searchDuration);
-
     // Listen to scan results
     flutterBlue.scanResults.listen((results) {
       // do something with scan results
@@ -47,7 +45,7 @@ class ConnectionSheetState extends State<ConnectionSheet> {
           }
 
           setState(() {
-            candidates.add(r.device);
+            candidates = [r.device, ...candidates];
           });
         }
 
@@ -55,10 +53,20 @@ class ConnectionSheetState extends State<ConnectionSheet> {
       }
     });
 
-    await resp;
+    try {
+      var resp = flutterBlue.startScan(timeout: searchDuration);
 
-    // Stop scanning
-    flutterBlue.stopScan();
+      await resp;
+
+      // Stop scanning
+      flutterBlue.stopScan();
+
+      isScanning = false;
+    } catch (e) {
+      log("failed to start scan");
+      isScanning = false;
+      return;
+    }
 
     isScanning = false;
   }

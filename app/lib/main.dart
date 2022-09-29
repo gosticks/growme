@@ -16,6 +16,22 @@ void main() {
       create: (context) => DeviceModel(), child: const GrowMeApp()));
 }
 
+const primarySwatch = MaterialColor(0xFFE5DBCF, {
+  50: Color(0xFFE5E7E5),
+  100: Color(0xFFBEC3BE),
+  200: Color(0xFF939C92),
+  300: Color(0xFF687466),
+  400: Color(0xFF475646),
+  500: Color(0xFF273825),
+  600: Color(0xFF233221),
+  700: Color(0xFF1D2B1B),
+  800: Color(0xFF172416),
+  900: Color(0xFF0E170D),
+});
+const PrimaryAssentColor = Color(0x00263825);
+const PrimaryDarkColor = Color(0xFF808080);
+const ErroColor = Color(0xFF808080);
+
 class GrowMeApp extends StatelessWidget {
   const GrowMeApp({super.key});
 
@@ -25,6 +41,7 @@ class GrowMeApp extends StatelessWidget {
     return MaterialApp(
       title: 'GrowMe',
       theme: ThemeData(
+        fontFamily: 'Manrope',
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -34,7 +51,7 @@ class GrowMeApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: primarySwatch,
       ),
       home: const GrowMeHomePage(title: 'GrowMe'),
     );

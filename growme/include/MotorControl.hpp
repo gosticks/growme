@@ -16,7 +16,7 @@
 struct MotorControl {
 	uint8_t index;
 	A4988 *stepper;
-	long stepTarget = 25;
+	long stepTarget = 0;
 	long currentPosition = 0;
 	BLECharacteristic *bleCharacteristic = NULL;
 	BLECharacteristic *bleInfoCharacteristic = NULL;

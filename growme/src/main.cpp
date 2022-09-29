@@ -178,6 +178,9 @@ class CustomBLEServerCallback : public BLEServerCallbacks {
 	void onDisconnect(BLEServer *pServer) {
 		deviceConnected = false;
 		ESP_LOGI("MAIN", "disconnected from remote");
+
+		// restart advertising after connection loss
+		BLEDevice::startAdvertising();
 	}
 };
 

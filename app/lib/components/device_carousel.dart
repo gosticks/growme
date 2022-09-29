@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:grow_me_app/components/button.dart';
 import 'package:grow_me_app/components/card.dart';
+import 'package:grow_me_app/components/device_action_sheet.dart';
 import 'package:grow_me_app/components/device_debug.dart';
 import 'package:grow_me_app/components/device_model.dart';
 import 'package:provider/provider.dart';
@@ -30,18 +31,24 @@ class DeviceCarouselState extends State<DeviceCarousel> {
                         children: [
                           Text(device.description.name, textScaleFactor: 2),
                           const SizedBox(height: 15),
-                          const CircleAvatar(
-                            backgroundColor: Colors.lightGreen,
+                          CircleAvatar(
+                            backgroundColor: device.isConnected
+                                ? Colors.lightGreen
+                                : Colors.grey[400],
                             backgroundImage:
                                 AssetImage('assets/prototype-render.png'),
                             radius: 150.0,
                           ),
-                          const SizedBox(height: 25),
-                          TextButton(
-                              onPressed: () {
-                                showDeviceDebugView(context, device);
-                              },
-                              child: const Text("Open Debug menu"))
+                          ...(!device.isConnected
+                              ? [
+                                  const SizedBox(height: 25),
+                                  Text("Lost connection..."),
+                                ]
+                              : [
+                                  const SizedBox(height: 25),
+                                ]),
+                          Spacer(),
+                          DeviceActionSheet(device: device, model: model)
                         ].toList(),
                       ))));
         },
