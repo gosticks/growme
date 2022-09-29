@@ -11,7 +11,7 @@
 #include "pb_encode.h"
 
 // using a 200-step motor (most common)
-#define MOTOR_STEPS 200
+#define MOTOR_STEPS 50
 
 struct MotorControl {
 	uint8_t index;

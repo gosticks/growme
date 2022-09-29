@@ -151,8 +151,10 @@ void controlTask(void *pvParameter) {
 		// parse movement direction
 		if (digitalRead(UP_BTN_PIN) == HIGH) {
 			direction = 1;
+			ESP_LOGI("MAIN", "down");
 		} else if (digitalRead(DOWN_BTN_PIN) == HIGH) {
 			direction = -1;
+			ESP_LOGI("MAIN", "up");
 		} else {
 			direction = 0;
 		}

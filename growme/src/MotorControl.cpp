@@ -41,12 +41,14 @@ struct RepeatedStatus {
 };
 
 bool status_encode(pb_ostream_t *stream, const pb_field_t *field, void *const *arg) {
+	ESP_LOGI(TAG, "write callback stated");
+
 	RepeatedStatus *def = (RepeatedStatus *)*arg;
 	while (def->index < def->max_size) {
 		int32_t status = def->status[def->index];
 		++def->index;
 
-		if (!pb_encode_tag(stream, PB_WT_STRING, field->tag)) {
+		if (!pb_encode_tag(stream, PB_WT_VARINT, field->tag)) {
 			ESP_LOGE(TAG, "failed to encode: %s", PB_GET_ERROR(stream));
 			return false;
 		}
@@ -58,6 +60,8 @@ bool status_encode(pb_ostream_t *stream, const pb_field_t *field, void *const *a
 
 		ESP_LOGI(TAG, "written value %d", status);
 	}
+
+	ESP_LOGI(TAG, "write callback completed");
 
 	return true;
 }
@@ -71,12 +75,15 @@ void CustomBLEMotorInfoCallback::onRead(BLECharacteristic *characteristic) {
 	for (int i = 0; i < this->numMotors; i++) {
 		status[i] = this->motors[i]->currentPosition;
 	}
+
+	ESP_LOGI(TAG, "status items %d", numMotors);
+
 	struct RepeatedStatus args = {.status = status, .index = 0, .max_size = this->numMotors};
 
 	msg.status.arg = &args;
 	msg.status.funcs.encode = status_encode;
 
-	if (!pb_encode(&stream, Command_fields, &this->msg)) {
+	if (!pb_encode(&stream, Command_fields, &msg)) {
 		ESP_LOGE(TAG, "failed to encode: %s", PB_GET_ERROR(&stream));
 		return;
 	}
@@ -89,7 +96,7 @@ void CustomBLEMotorInfoCallback::onRead(BLECharacteristic *characteristic) {
 };
 
 MotorControl::MotorControl(uint8_t index, short dir, short step) {
-	this->stepper = new A4988(MOTOR_STEPS, dir, step);
+	this->stepper = new A4988(MOTOR_STEPS, dir, step, 5);
 	this->index = index;
 	int address = index * 8;
 
