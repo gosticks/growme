@@ -93,12 +93,17 @@ void motorTask(void *pvParameter) {
 		// - button pressed
 		// - no spin command was already started
 		if (direction != 0) {
-			xSemaphoreTake(bin_sem, portMAX_DELAY);
+			// FIXME: sema is somehow broken, for now YOLO and hope motor tasks run on CPU1
+			// since BT is running on CPU0
+			// ESP_LOGI(tag, "Taking sema");
+			// xSemaphoreTake(bin_sem, portMAX_DELAY);
+			// ESP_LOGI(tag, "got sema");
 			if (runningMotors == 0) {
+				// ESP_LOGI(tag, "enabled motors");
 				digitalWrite(M_ENABLE_PIN, LOW);
 			}
 			runningMotors++;
-			xSemaphoreGive(bin_sem);
+			// xSemaphoreGive(bin_sem);
 
 			m->stepper->startRotate(direction * rotationAngle);
 
@@ -117,12 +122,13 @@ void motorTask(void *pvParameter) {
 			}
 			m->stepper->stop();
 
-			xSemaphoreTake(bin_sem, portMAX_DELAY);
+			// xSemaphoreTake(bin_sem, portMAX_DELAY);
 			runningMotors--;
 			if (runningMotors == 0) {
+				// ESP_LOGI(tag, "disabled motors");
 				digitalWrite(M_ENABLE_PIN, HIGH);
 			}
-			xSemaphoreGive(bin_sem);
+			// xSemaphoreGive(bin_sem);
 		}
 
 		// target based motor handling
