@@ -39,7 +39,12 @@ class ConnectionSheetState extends State<ConnectionSheet> {
     flutterBlue.scanResults.listen((results) {
       // do something with scan results
       for (ScanResult r in results) {
-        if (r.advertisementData.serviceUuids.contains(bleServiceName)) {
+        if (r.device.name.contains("GrowMe")) {
+          log(r.device.name);
+        }
+        if (r.advertisementData.serviceUuids
+            .map((e) => e.toLowerCase())
+            .contains(bleServiceName.toLowerCase())) {
           log("found device with known service type");
           if (candidates.indexWhere((d) => d.id == r.device.id) != -1) {
             continue;

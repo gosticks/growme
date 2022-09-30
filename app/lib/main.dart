@@ -66,20 +66,10 @@ class GrowMeHomePage extends StatefulWidget {
   State<GrowMeHomePage> createState() => _MyHomePageState();
 }
 
-enum AppState {
-  DATA_NOT_FETCHED,
-  FETCHING_DATA,
-  DATA_READY,
-  NO_DATA,
-  AUTH_NOT_GRANTED,
-  DATA_ADDED,
-  DATA_NOT_ADDED,
-  STEPS_READY,
-}
-
 class _MyHomePageState extends State<GrowMeHomePage> {
   Widget _connectionCard() {
     return GrowMeCard(
+        backgroundColor: green.shade200,
         child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -131,7 +121,7 @@ class _MyHomePageState extends State<GrowMeHomePage> {
       backgroundColor: green,
       body: Column(
           children: [
-        const SizedBox(height: 50),
+        const SizedBox(height: 15),
         DeviceCarousel(leadingCarouselItems: [_connectionCard()]),
         const Spacer(),
       ].toList()),

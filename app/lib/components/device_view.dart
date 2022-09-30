@@ -87,11 +87,11 @@ class MetricIcon extends StatelessWidget {
             ),
             child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: Icon(
+                child: FittedBox(
+                    child: Icon(
                   _icon(),
-                  size: 33,
                   color: _textColor(),
-                )),
+                ))),
           ),
         ));
   }
@@ -115,18 +115,24 @@ class DeviceViewState extends State<DeviceView> {
         children: [
           Text(
             device.description.name,
-            textScaleFactor: 2,
+            textScaleFactor: 1.5,
             textAlign: TextAlign.left,
           ),
           const SizedBox(height: 25),
-          CircleAvatar(
-            backgroundColor: device.isConnected ? sand.shade900 : sand.shade900,
-            radius: 120.0,
-            child: const Padding(
-                padding: EdgeInsets.all(25),
-                child: Image(
-                    image: AssetImage('assets/images/grow-me-medium.png'))),
-          ),
+          ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: 90.0,
+                maxHeight: 200.0,
+              ),
+              child: CircleAvatar(
+                backgroundColor:
+                    device.isConnected ? sand.shade900 : sand.shade900,
+                radius: 120.0,
+                child: const Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Image(
+                        image: AssetImage('assets/images/grow-me-medium.png'))),
+              )),
           const Spacer(),
           const Text(
             "Progress",
@@ -137,9 +143,10 @@ class DeviceViewState extends State<DeviceView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               direction: Axis.horizontal,
               children: device.metrics
-                  .map((m) => MetricIcon(m, (_) {
+                  .map((m) => Expanded(
+                          child: MetricIcon(m, (_) {
                         showEditMetricModal(context, device, m);
-                      }))
+                      })))
                   .toList()),
           const Spacer(),
           !device.isConnected

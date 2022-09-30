@@ -3,9 +3,10 @@ import 'package:grow_me_app/colors.dart';
 import 'package:grow_me_app/main.dart';
 
 class GrowMeCard extends StatelessWidget {
-  const GrowMeCard({this.child, super.key});
+  const GrowMeCard({this.child, this.backgroundColor, super.key});
 
   final Widget? child;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,9 @@ class GrowMeCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
-        color: sand,
+        color: backgroundColor ?? sand,
         shape: BoxShape.rectangle,
-        border: Border.all(color: sand, width: 2, style: BorderStyle.solid),
+        //border: Border.all(color: sand, width: 2, style: BorderStyle.solid),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),

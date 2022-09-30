@@ -41,7 +41,7 @@ class DeviceCarouselState extends State<DeviceCarousel> {
     return Consumer<DeviceModel>(builder: (context, model, child) {
       return CarouselSlider(
         options: CarouselOptions(
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.8,
             initialPage: model.devices.isNotEmpty ? 1 : 0,
             autoPlay: false,
             scrollPhysics: const BouncingScrollPhysics(),
