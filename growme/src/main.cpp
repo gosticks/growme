@@ -139,12 +139,12 @@ void motorTask(void *pvParameter) {
 			// NOTE: maybe adjust speed here
 			m->stepper->startMove(diff);
 
-			xSemaphoreTake(bin_sem, portMAX_DELAY);
+			// xSemaphoreTake(bin_sem, portMAX_DELAY);
 			if (runningMotors == 0) {
 				digitalWrite(M_ENABLE_PIN, LOW);
 			}
 			runningMotors++;
-			xSemaphoreGive(bin_sem);
+			// xSemaphoreGive(bin_sem);
 
 			while (true) {
 				// motor control loop - send pulse and return how long to wait until next pulse
@@ -161,12 +161,12 @@ void motorTask(void *pvParameter) {
 				}
 			}
 			m->updateCurrentPosition(ongoingStepTarget);
-			xSemaphoreTake(bin_sem, portMAX_DELAY);
+			// xSemaphoreTake(bin_sem, portMAX_DELAY);
 			runningMotors--;
 			if (runningMotors == 0) {
 				digitalWrite(M_ENABLE_PIN, HIGH);
 			}
-			xSemaphoreGive(bin_sem);
+			// xSemaphoreGive(bin_sem);
 		}
 
 		vTaskDelay(noActionIdleTime);
