@@ -42,7 +42,7 @@ class EditDeviceViewState extends State<EditDeviceView> {
         builder: (context, model, value) => Column(
               // mainAxisSize: MainAxisSize.min,
               children: [
-                const CircleAvatar(
+                /*const CircleAvatar(
                   backgroundColor: green,
                   radius: 100.0,
                   child: Padding(
@@ -50,7 +50,7 @@ class EditDeviceViewState extends State<EditDeviceView> {
                       child: Image(
                           image:
                               AssetImage('assets/images/grow-me-medium.png'))),
-                ),
+                ),*/
                 const SizedBox(height: 50),
                 const Text("Give your plant a name",
                     textScaleFactor: 1.5, textAlign: TextAlign.left),

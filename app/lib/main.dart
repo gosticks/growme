@@ -69,7 +69,6 @@ class GrowMeHomePage extends StatefulWidget {
 class _MyHomePageState extends State<GrowMeHomePage> {
   Widget _connectionCard() {
     return GrowMeCard(
-        backgroundColor: green.shade200,
         child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
