@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:grow_me_app/colors.dart';
@@ -41,7 +43,7 @@ class DeviceCarouselState extends State<DeviceCarousel> {
     return Consumer<DeviceModel>(builder: (context, model, child) {
       return CarouselSlider(
         options: CarouselOptions(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: min(MediaQuery.of(context).size.height * 0.8, 550),
             initialPage: model.devices.isNotEmpty ? 1 : 0,
             autoPlay: false,
             scrollPhysics: const BouncingScrollPhysics(),

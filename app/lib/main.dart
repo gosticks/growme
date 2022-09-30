@@ -120,7 +120,7 @@ class _MyHomePageState extends State<GrowMeHomePage> {
       backgroundColor: green,
       body: Column(
           children: [
-        const SizedBox(height: 15),
+        const Spacer(),
         DeviceCarousel(leadingCarouselItems: [_connectionCard()]),
         const Spacer(),
       ].toList()),
