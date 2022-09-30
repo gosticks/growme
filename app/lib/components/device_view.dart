@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:grow_me_app/colors.dart';
@@ -121,7 +123,8 @@ class DeviceViewState extends State<DeviceView> {
           const SizedBox(height: 25),
           CircleAvatar(
             backgroundColor: device.isConnected ? sand.shade900 : sand.shade900,
-            radius: 120.0,
+            radius: min(MediaQuery.of(context).size.height * 0.13,
+                MediaQuery.of(context).size.width * 0.5),
             child: const Padding(
                 padding: EdgeInsets.all(25),
                 child: Image(
