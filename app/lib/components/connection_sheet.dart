@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:grow_me_app/app.pb.dart';
+import 'package:grow_me_app/colors.dart';
 import 'package:grow_me_app/components/bottom_sheet.dart';
 import 'package:grow_me_app/components/button.dart';
 
@@ -77,10 +78,17 @@ class ConnectionSheetState extends State<ConnectionSheet> {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 10),
-        const Text("scanning for nearby devices"),
+        const Icon(Icons.bluetooth, size: 50, color: green),
         const SizedBox(height: 10),
+        const Text(
+          "scanning for nearby devices",
+          textScaleFactor: 2,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 50),
         const LinearProgressIndicator(
           value: null,
         ),
@@ -146,12 +154,16 @@ class ConnectionSheetState extends State<ConnectionSheet> {
 
                 showCustomModalBottomSheet(
                     context,
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
+                    Flex(
+                      direction: Axis.vertical,
                       children: <Widget>[
                         _scanningProgress(),
                         ..._availableDeviceList(model),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 50),
+                        // const Spacer(),
+                        Button("Cancel", () {
+                          Navigator.pop(context);
+                        })
                       ],
                     ));
               },

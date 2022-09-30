@@ -1,3 +1,5 @@
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:grow_me_app/colors.dart';
 import 'package:grow_me_app/components/card.dart';
 import 'package:grow_me_app/components/connection_sheet.dart';
 import 'package:grow_me_app/components/device_carousel.dart';
@@ -8,32 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(ChangeNotifierProvider(
       create: (context) => DeviceModel(), child: const GrowMeApp()));
 }
-
-const primarySwatch = MaterialColor(0xFF273825, {
-  50: Color(0xFFE5E7E5),
-  100: Color(0xFFBEC3BE),
-  200: Color(0xFF939C92),
-  300: Color(0xFF687466),
-  400: Color(0xFF475646),
-  500: Color(0xFF273825),
-  600: Color(0xFF233221),
-  700: Color(0xFF1D2B1B),
-  800: Color(0xFF172416),
-  900: Color(0xFF0E170D),
-});
-
-const lightBackgroundColor = Color(0xFFE5DBCF);
-
-const PrimaryAssentColor = Color(0x00263825);
-const PrimaryDarkColor = Color(0xFF808080);
-const ErroColor = Color(0xFF808080);
 
 class GrowMeApp extends StatelessWidget {
   const GrowMeApp({super.key});
@@ -42,20 +26,23 @@ class GrowMeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'GrowMe',
       theme: ThemeData(
-        fontFamily: 'Manrope',
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: primarySwatch,
-      ),
+          fontFamily: 'Manrope',
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: green,
+          textTheme: Theme.of(context)
+              .textTheme
+              .apply(bodyColor: green, displayColor: sand)),
       home: const GrowMeHomePage(title: 'GrowMe'),
     );
   }
@@ -94,22 +81,32 @@ class _MyHomePageState extends State<GrowMeHomePage> {
   Widget _connectionCard() {
     return GrowMeCard(
         child: Padding(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 const Spacer(),
-                const Icon(Icons.bluetooth),
+                const Icon(Icons.forest, size: 120, color: green),
                 const SizedBox(height: 15),
                 const Text(
                   "Grow your forest",
                   textScaleFactor: 2,
                 ),
                 const SizedBox(height: 15),
-                const Text("Add new GrowMe products"),
+                const Text("Connect new GrowMe products"),
                 const Spacer(),
                 const ConnectionSheet(),
               ].toList(),
             )));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialization();
+  }
+
+  void initialization() async {
+    FlutterNativeSplash.remove();
   }
 
   @override
@@ -131,7 +128,7 @@ class _MyHomePageState extends State<GrowMeHomePage> {
         automaticallyImplyLeading: true,
         elevation: 0,
       ),
-      backgroundColor: primarySwatch,
+      backgroundColor: green,
       body: Column(
           children: [
         const SizedBox(height: 50),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grow_me_app/colors.dart';
 
 class BottomSheet extends StatelessWidget {
   const BottomSheet({
@@ -14,23 +15,32 @@ class BottomSheet extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
-        color: Colors.white,
+        color: sand,
         shape: BoxShape.rectangle,
-        border: Border.all(
-            color: Colors.grey.shade300, width: 1, style: BorderStyle.solid),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.4),
+            color: Colors.black.withOpacity(0.4),
             spreadRadius: 3,
             blurRadius: 25,
             offset: const Offset(0, 10), // changes position of shadow
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 15),
-        child: child,
-      ),
+      child: Column(children: [
+        Padding(
+            padding: const EdgeInsets.all(10),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: sand.shade900,
+              ),
+              child: const SizedBox(height: 10, width: 60),
+            )),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: child,
+        )
+      ]),
     );
   }
 }

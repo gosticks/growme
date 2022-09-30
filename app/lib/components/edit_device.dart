@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:grow_me_app/colors.dart';
 import 'package:grow_me_app/components/bottom_sheet.dart';
 import 'package:grow_me_app/components/button.dart';
 import 'package:grow_me_app/components/device_model.dart';
@@ -39,24 +40,29 @@ class EditDeviceViewState extends State<EditDeviceView> {
   Widget build(BuildContext context) {
     return Consumer<DeviceModel>(
         builder: (context, model, value) => Column(
-              mainAxisSize: MainAxisSize.min,
+              // mainAxisSize: MainAxisSize.min,
               children: [
+                const CircleAvatar(
+                  backgroundColor: green,
+                  radius: 100.0,
+                  child: Padding(
+                      padding: EdgeInsets.all(25),
+                      child: Image(
+                          image:
+                              AssetImage('assets/images/grow-me-medium.png'))),
+                ),
+                const SizedBox(height: 50),
+                const Text("Give your plant a name",
+                    textScaleFactor: 1.5, textAlign: TextAlign.left),
                 const SizedBox(height: 15),
                 TextField(
                   controller: _deviceNameController,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: UnderlineInputBorder(),
                     hintText: 'Give your plant a name',
                   ),
                 ),
                 const SizedBox(height: 25),
-                const CircleAvatar(
-                  backgroundColor: Colors.lightGreen,
-                  backgroundImage:
-                      AssetImage('assets/images/prototype-render.png'),
-                  radius: 150.0,
-                ),
-                const SizedBox(height: 50),
                 Button("Save", () {
                   widget.device.description.name =
                       _deviceNameController.value.text;
@@ -74,7 +80,9 @@ class EditDeviceViewState extends State<EditDeviceView> {
 Future showEditDeviceModal(BuildContext context, LinkedDevice device) {
   return showCustomModalBottomSheet(
       context,
-      EditDeviceView(
-        device: device,
-      ));
+      Padding(
+          padding: const EdgeInsets.all(25),
+          child: EditDeviceView(
+            device: device,
+          )));
 }

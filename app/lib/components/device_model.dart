@@ -23,10 +23,32 @@ const Map<String, String> deviceCharacteristics = {
   "info": "9c05490f-cc74-4fd2-8d16-fb228e3f2270"
 };
 
+enum MetricType { pomodor, sleep, water, steps }
+
+class DeviceMetric {
+  MetricType type;
+  int progress = 0;
+  int target = 0;
+  String unit;
+
+  num get percentage {
+    return progress / target;
+  }
+
+  DeviceMetric(this.type, this.progress, this.target, this.unit);
+}
+
 class LinkedDevice {
   BluetoothDevice? _device;
   MotorStatus? _motorStatus;
   KnownDevice description;
+  List<DeviceMetric?> metrics = [
+    DeviceMetric(MetricType.sleep, 0, 8, "h"),
+    DeviceMetric(MetricType.pomodor, 4, 10, "cycles"),
+    DeviceMetric(MetricType.water, 564, 2700, "ml"),
+    // empty metric slot
+    null
+  ];
   BluetoothDeviceState _status = BluetoothDeviceState.disconnected;
 
   MotorStatus? get motorStatus {
@@ -41,7 +63,7 @@ class LinkedDevice {
     return _device;
   }
 
-  void set device(BluetoothDevice? newDevice) {
+  set device(BluetoothDevice? newDevice) {
     // NOTE: what should be done if device already set?
     if (newDevice != null) {
       newDevice.state.listen((event) {
@@ -155,7 +177,7 @@ class DeviceModel extends ChangeNotifier {
   LinkedDevice addFromDevice(BluetoothDevice device) {
     var linkedDevice = LinkedDevice(
       KnownDevice(
-          name: "Untitled",
+          name: "Hektor the Unnamed",
           remoteId: device.id.toString(),
           remoteName: device.name),
       device,
@@ -199,6 +221,10 @@ class DeviceModel extends ChangeNotifier {
     _saveState();
   }
 
+  void reconnect(LinkedDevice device) async {
+    _scanForKnownDevices();
+  }
+
   void _scanForKnownDevices() async {
     // try reconnecting devices
     FlutterBlue flutterBlue = FlutterBlue.instance;
@@ -232,7 +258,7 @@ class DeviceModel extends ChangeNotifier {
 
     // Start scanning
     try {
-      await flutterBlue.startScan(timeout: const Duration(seconds: 10));
+      await flutterBlue.startScan(timeout: const Duration(seconds: 2));
 
       notifyListeners();
     } catch (e) {

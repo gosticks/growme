@@ -26,7 +26,8 @@ class DeviceDebugViewState extends State<DeviceDebugView> {
       ..._motorStepValues.asMap().entries.map((entry) => Column(children: [
             const SizedBox(height: 15),
             Text("Motor ${entry.key + 1}"),
-            Row(
+            Flex(
+              direction: Axis.horizontal,
               children: [
                 (widget.device.motorStatus == null
                     ? Container()
@@ -56,7 +57,6 @@ class DeviceDebugViewState extends State<DeviceDebugView> {
                     });
                   },
                 ),
-                const Spacer(),
                 IconButton(
                     onPressed: () {
                       widget.device.moveMotor(

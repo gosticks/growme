@@ -29,22 +29,53 @@ class DeviceActionSheet extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                    title: const Text("Rename"),
-                    leading: const Icon(Icons.edit),
+                    title: const Text(
+                      "Edit goals",
+                      textScaleFactor: 1.25,
+                    ),
+                    leading: const Icon(
+                      Icons.add_circle,
+                      size: 33,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       showEditDeviceModal(context, device);
                     }),
                 ListTile(
-                    title: const Text("Debug"),
-                    leading: const Icon(Icons.bug_report),
+                    title: const Text(
+                      "Rename",
+                      textScaleFactor: 1.25,
+                    ),
+                    leading: const Icon(
+                      Icons.edit,
+                      size: 33,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      showEditDeviceModal(context, device);
+                    }),
+                ListTile(
+                    title: const Text(
+                      "Debug",
+                      textScaleFactor: 1.25,
+                    ),
+                    leading: const Icon(
+                      Icons.bug_report,
+                      size: 33,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       showDeviceDebugView(context, device);
                     }),
                 ListTile(
-                    title: const Text("Remove"),
-                    leading: const Icon(Icons.delete),
+                    title: const Text(
+                      "Remove",
+                      textScaleFactor: 1.25,
+                    ),
+                    leading: const Icon(
+                      Icons.delete,
+                      size: 33,
+                    ),
                     onTap: () {
                       model.removeById(device.description.remoteId);
                       Navigator.pop(context);

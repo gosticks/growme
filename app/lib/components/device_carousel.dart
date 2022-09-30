@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:grow_me_app/colors.dart';
 import 'package:grow_me_app/components/button.dart';
 import 'package:grow_me_app/components/card.dart';
 import 'package:grow_me_app/components/device_action_sheet.dart';
-import 'package:grow_me_app/components/device_debug.dart';
 import 'package:grow_me_app/components/device_model.dart';
+import 'package:grow_me_app/components/device_view.dart';
 import 'package:provider/provider.dart';
 
 class DeviceCarousel extends StatefulWidget {
@@ -26,30 +27,9 @@ class DeviceCarouselState extends State<DeviceCarousel> {
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               child: GrowMeCard(
                   child: Padding(
-                      padding: const EdgeInsets.all(25),
-                      child: Column(
-                        children: [
-                          Text(device.description.name, textScaleFactor: 2),
-                          const SizedBox(height: 15),
-                          CircleAvatar(
-                            backgroundColor: device.isConnected
-                                ? Colors.lightGreen
-                                : Colors.grey[400],
-                            backgroundImage: const AssetImage(
-                                'assets/images/prototype-render.png'),
-                            radius: 150.0,
-                          ),
-                          ...(!device.isConnected
-                              ? [
-                                  const SizedBox(height: 25),
-                                  const Text("Lost connection..."),
-                                ]
-                              : [
-                                  const SizedBox(height: 25),
-                                ]),
-                          const Spacer(),
-                          DeviceActionSheet(device: device, model: model)
-                        ].toList(),
+                      padding: const EdgeInsets.all(10),
+                      child: DeviceView(
+                        device: device,
                       ))));
         },
       );
@@ -64,6 +44,8 @@ class DeviceCarouselState extends State<DeviceCarousel> {
             height: MediaQuery.of(context).size.height * 0.7,
             initialPage: model.devices.isNotEmpty ? 1 : 0,
             autoPlay: false,
+            scrollPhysics: const BouncingScrollPhysics(),
+            enlargeStrategy: CenterPageEnlargeStrategy.scale,
             enlargeCenterPage: true,
             clipBehavior: Clip.none,
             enableInfiniteScroll: false),

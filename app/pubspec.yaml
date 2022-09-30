@@ -42,6 +42,9 @@ dependencies:
   flutter_blue: ^0.8.0
   carousel_slider: ^4.1.1
   shared_preferences: ^2.0.15
+  workmanager: ^0.5.0
+  flutter_native_splash: ^2.2.10+1
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -91,3 +94,8 @@ flutter:
           weight: 700
         - asset: assets/fonts/Manrope-ExtraBold.ttf
           weight: 800
+
+flutter_icons:
+  image_path: "assets/icons/icon.png"
+  android: true
+  ios: true
